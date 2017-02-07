@@ -19,7 +19,6 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	}		
 	dv_var <- as.character( formula[[2]] )
 	y <- data[,dv_var]
-
 	#*** lambda fixed
 	is_lambda_fixed <- TRUE
 	if (  ( type %in% c("yjt","bct") ) & ( is.null( lambda_fixed ) ) ){
@@ -102,7 +101,7 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 			}
 			y_pred <- Xdes %*% beta + offset_values
 			ll_i <- dens_fct( y , location=y_pred, shape=shape, lambda=lambda,
-						df = df )						
+						df = df )
 			ll <- - sum( weights * log( ll_i + eps ) )
 			#--- include prior distributions
 			if (is_prior){
@@ -114,10 +113,12 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	}
 	#***********************************					
 
+	
 	#-------------------------------------------
 	#---- optimization using optim
 	mod1 <- stats::optim( par=par , fn=fct_optim , method = "L-BFGS-B", 
-				hessian = TRUE , control=control)
+				hessian = TRUE , control=control)		
+				
 	#--- extract parameters
 	beta <- mdmb_regression_extract_parameters( mod=mod1 , parnames=parnames , 
 				type=type , is_lambda_fixed=is_lambda_fixed , 

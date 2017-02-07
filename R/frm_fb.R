@@ -40,10 +40,11 @@ frm_fb <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
 	
 	#*** fixed standard deviations
 	# ind0 <- frm_prepare_models_sigma_fixed( ind0=ind0, NM=NM, dat0=dat0, dat=dat )
-	
+
 	#*** initial estimation of models
 	res3 <- frm_fb_initial_parameters(dat=dat, ind0=ind0, data_init=data_init)	
 	ind0 <- res3$ind0	
+	
 	parms <- res3$parms
 	parms_index <- res3$parms_index
 	model_results <- res3$model_results
@@ -53,6 +54,7 @@ frm_fb <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
 						Nsave=Nsave, Nimp=Nimp , npars=npars, parms=parms,
 						parms_index = parms_index, predictorMatrix=predictorMatrix
 							)				
+						
 	#**** inits objects for imputations
 	imputations_mcmc <- frm_fb_init_imputations( Nimp = Nimp, 
 							model_results=model_results,
@@ -74,7 +76,6 @@ zz0 <- Sys.time()
 	while( iterate ){		
 
 #   cat("\n..........", iter , "......\n")
-	
 		#*** sample model parameters		
 		res <- frm_fb_sample_parameters( dat=dat, ind0=ind0 , NM=NM, iter = iter,
 					weights0=weights0 , dat_resp=dat_resp, ind_resp=ind_resp,
@@ -89,6 +90,7 @@ zz0 <- Sys.time()
 					model_results=model_results, ind0=ind0, iter=iter, dat=dat )
 		imputations_mcmc <- res$imputations_mcmc
 		dat <- res$dat
+	
 		#*** refreshing proposal SD for parameters and imputed values
 		if ( ( iter %% refresh == 0 ) & ( iter <= burnin ) ){	
 			ind0 <- frm_fb_mh_refresh_parameters( ind0=ind0 , acc_bounds=acc_bounds )

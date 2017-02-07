@@ -1,8 +1,8 @@
 Package: mdmb
 Type: Package
 Title: Model Based Treatment of Missing Data
-Version: 0.1-0
-Date: 2017-01-25
+Version: 0.2-0
+Date: 2017-02-07 11:18:52
 Author: 
     Alexander Robitzsch [aut, cre], Oliver Luedtke [aut]
 Maintainer: 
@@ -17,6 +17,6 @@ Imports: CDM, coda, graphics, miceadds, sirt, stats, TAM, utils
 Suggests: mice
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2017-01-25 16:45:33 UTC; sunpn563
+Packaged: 2017-02-07 10:19:03 UTC; sunpn563
 Repository: CRAN
-Date/Publication: 2017-01-26 12:08:16
+Date/Publication: 2017-02-07 16:23:15

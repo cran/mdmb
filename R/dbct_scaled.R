@@ -17,6 +17,7 @@ dbct_scaled <- function( x , location=0, shape=1, lambda = 1 , df = Inf )
 	} else {
 		yt <- 1 / y
 	}
+	yt <- ifelse( x <= 0 , 0 , yt )	
 	#---- adjustment
 	dy <- dy * yt	
 	return(dy)

@@ -28,6 +28,15 @@ CHANGELOG mdmb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+---------------------------------------------------------------------
+Versions 0.2  -- 2017-02-07  --  CRAN mdmb 0.2-0
+---------------------------------------------------------------------
+
+FIXED * fixed an error in initialization of sigma parameter in 
+        mdmb::frm_fb function with 'linreg' imputation
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: ---
 
 ---------------------------------------------------------------------
 Versions 0.1  -- 2017-01-25  --  CRAN mdmb 0.1-0

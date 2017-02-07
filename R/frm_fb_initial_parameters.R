@@ -12,7 +12,7 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init )
 	parms00 <- list( NA , NA )
 	for (mm in 1:NM1){
 		# mm <- 1	
-# cat("\n------ mm = " , mm , "----- \n")		
+#  cat("\n------ mm = " , mm , "----- \n")		
 		ind_mm <- ind0[[mm]]
 		var_mm <- ind_mm$dv_vars
 		model_mm <- ind_mm$model
@@ -77,7 +77,7 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init )
 				parms_index[[mm]][[vv]] <- vec0
 			}
 		}	
-	}	
+	}		
 	#--- output
 	res <- list(ind0=ind0, parms = parms, parms_index = parms_index ,
 				npars = N0 , model_results = model_results )
