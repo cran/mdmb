@@ -15,16 +15,6 @@ Model Based Treatment of Missing Data
 }
 
 \details{
-\code{DESCRIPTION} \pkg{mdmb} package
-
-\tabular{ll}{
-Package: \tab \pkg{mdmb} \cr
-Type: \tab Package\cr
-Version: \tab 0.2 \cr
-Publication Year: \tab 2017\cr
-License: \tab GPL (>= 2)\cr
-URL: \tab \url{https://sites.google.com/site/alexanderrobitzsch/software} \cr
-}
 
 \itemize{
 

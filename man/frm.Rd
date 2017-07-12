@@ -32,6 +32,9 @@ Missing values are handled by numerical integration in \code{frm_em}
 (see also Allison, 2012). The user has to specify an integration grid for each 
 variable (defined in argument \code{nodes} for each model). 
 
+Standard error estimates in \code{frm_em} are obtained by a numerical differentiation of 
+the Fisher score function (see Jamshidian & Jennrich, 2000). 
+
 The function \code{frm_fb} employs a fully Bayesian approach with noninformative
 prior distribution. This function imputes missing values in the models from
 the posterior distributions. Imputed datasets can be extracted by the
@@ -47,7 +50,7 @@ The handling of ordinal and nominal covariates will be included in future
 \usage{
 # Factored regression model: Numerical integration with EM algorithm
 frm_em(dat, dep, ind, weights = NULL, verbose = TRUE, maxiter = 500, conv_dev = 1e-08, 
-         conv_parm = 1e-05, nodes_control = c(11,3), h = 1e-04)
+         conv_parm = 1e-05, nodes_control = c(11,5), h = 1e-04)
 
 \method{coef}{frm_em}(object, ...)
 \method{logLik}{frm_em}(object, ...)
@@ -192,6 +195,9 @@ Ibrahim, J. G. (1990). Incomplete data in generalized linear models.
 Ibrahim, J. G., Chen, M. H., Lipsitz, S. R., & Herring, A. H. (2005). 
 Missing-data methods for generalized linear models: A comparative review. 
 \emph{Journal of the American Statistical Association}, \bold{100}, 332-346.
+
+Jamshidian, M., & Jennrich, R. I. (2000). Standard errors for EM estimation. 
+\emph{Journal of the Royal Statistical Society (Series B), 62}, 257-270.
 
 Lee, M. C., & Mitra, R. (2016). Multiply imputing missing values in data sets 
 with mixed measurement scales using a sequence of generalised linear models. 
