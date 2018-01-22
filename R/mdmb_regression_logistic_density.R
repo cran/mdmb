@@ -1,3 +1,5 @@
+## File Name: mdmb_regression_logistic_density.R
+## File Version: 0.02
 
 mdmb_regression_logistic_density <- function( y, ypred , log, eps= 1E-50 )
 {

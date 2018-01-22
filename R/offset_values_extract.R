@@ -1,3 +1,5 @@
+## File Name: offset_values_extract.R
+## File Version: 0.07
 
 offset_values_extract <- function(formula, data )
 {

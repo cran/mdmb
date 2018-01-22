@@ -1,3 +1,6 @@
+%% File Name: offset_values_extract.Rd
+%% File Version: 0.07
+
 \name{offset_values_extract}
 \alias{offset_values_extract}
 %- Also NEED an '\alias' for EACH other topic documented here.

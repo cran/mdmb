@@ -1,3 +1,5 @@
+## File Name: mdmb_sample_probabilities.R
+## File Version: 0.03
 
 mdmb_sample_probabilities <- function(matr)
 {

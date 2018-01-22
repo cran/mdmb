@@ -1,3 +1,5 @@
+## File Name: yjt_regression.R
+## File Version: 0.09
 
 
 yjt_regression <- function( formula , data , weights = NULL,

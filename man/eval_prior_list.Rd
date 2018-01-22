@@ -1,3 +1,6 @@
+%% File Name: eval_prior_list.Rd
+%% File Version: 0.09
+
 \name{eval_prior_list}
 \alias{eval_prior_list}
 \alias{eval_prior_list_sumlog}

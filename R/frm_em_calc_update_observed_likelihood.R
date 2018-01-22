@@ -1,3 +1,5 @@
+## File Name: frm_em_calc_update_observed_likelihood.R
+## File Version: 0.03
 
 frm_em_calc_update_observed_likelihood <- function(like_obs, post_miss,
 	dmod , mm , ind_resp , ind_miss )

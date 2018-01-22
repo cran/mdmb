@@ -1,3 +1,5 @@
+## File Name: fit_yjt_scaled.R
+## File Version: 0.07
 
 fit_yjt_scaled <- function(x, df=Inf, par_init=NULL, lambda_fixed=NULL, weights=NULL)
 {

@@ -1,3 +1,6 @@
+%% File Name: mdmb-package.Rd
+%% File Version: 0.17
+
 \name{mdmb-package}
 \alias{mdmb-package}
 \alias{mdmb}

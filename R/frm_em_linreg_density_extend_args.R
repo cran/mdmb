@@ -1,3 +1,5 @@
+## File Name: frm_em_linreg_density_extend_args.R
+## File Version: 0.02
 
 frm_em_linreg_density_extend_args <- function(args, ind_mm)
 {

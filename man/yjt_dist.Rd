@@ -1,3 +1,6 @@
+%% File Name: yjt_dist.Rd
+%% File Version: 0.26
+
 \name{yjt_dist}
 \alias{yjt_dist}
 \alias{yj_trafo}

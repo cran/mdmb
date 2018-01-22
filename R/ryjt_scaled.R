@@ -1,3 +1,5 @@
+## File Name: ryjt_scaled.R
+## File Version: 0.06
 
 ryjt_scaled <- function(n , location=0, shape=1, lambda = 1, df=Inf)
 {

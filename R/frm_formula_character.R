@@ -1,3 +1,5 @@
+## File Name: frm_formula_character.R
+## File Version: 0.08
 
 
 frm_formula_character <- function( ind_mm)

@@ -1,3 +1,5 @@
+## File Name: fit_bct_scaled.R
+## File Version: 0.02
 
 fit_bct_scaled <- function(x, df=Inf, par_init=NULL, lambda_fixed=NULL, weights=NULL)
 {

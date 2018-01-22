@@ -1,3 +1,5 @@
+## File Name: frm_normalize_posterior.R
+## File Version: 0.04
 
 frm_normalize_posterior <- function( post , case )
 {

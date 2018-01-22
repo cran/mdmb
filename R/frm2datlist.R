@@ -1,3 +1,5 @@
+## File Name: frm2datlist.R
+## File Version: 0.05
 
 frm2datlist <- function( object)
 {

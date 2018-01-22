@@ -1,3 +1,5 @@
+## File Name: frm_fb_mh_refresh_parameters.R
+## File Version: 0.06
 
 frm_fb_mh_refresh_parameters <- function( ind0 , acc_bounds )
 {

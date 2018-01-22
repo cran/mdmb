@@ -1,3 +1,6 @@
+%% File Name: data.mb.Rd
+%% File Version: 0.03
+
 \name{data.mb}
 \alias{data.mb}
 

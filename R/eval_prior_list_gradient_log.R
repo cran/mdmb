@@ -1,3 +1,5 @@
+## File Name: eval_prior_list_gradient_log.R
+## File Version: 0.09
 
 eval_prior_list_gradient_log <- function( par , par_prior, h )
 {

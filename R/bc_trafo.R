@@ -1,3 +1,5 @@
+## File Name: bc_trafo.R
+## File Version: 0.03
 
 bc_trafo <- function( y , lambda )
 {

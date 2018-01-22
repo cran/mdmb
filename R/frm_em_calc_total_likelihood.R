@@ -1,3 +1,5 @@
+## File Name: frm_em_calc_total_likelihood.R
+## File Version: 0.06
 
 frm_em_calc_total_likelihood <- function(dat, weights0,
 	like_obs, post_miss)

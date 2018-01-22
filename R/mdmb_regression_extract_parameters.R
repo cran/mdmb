@@ -1,3 +1,5 @@
+## File Name: mdmb_regression_extract_parameters.R
+## File Version: 0.08
 
 mdmb_regression_extract_parameters <- function( mod , parnames , type , 
 	is_lambda_fixed , lambda_fixed)

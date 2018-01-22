@@ -1,3 +1,5 @@
+## File Name: yj_trafo.R
+## File Version: 0.13
 
 yj_trafo <- function(y, lambda)
 {

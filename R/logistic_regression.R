@@ -1,3 +1,5 @@
+## File Name: logistic_regression.R
+## File Version: 0.49
 
 
 logistic_regression <- function( formula , data , weights = NULL,

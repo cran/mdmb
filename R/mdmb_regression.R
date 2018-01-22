@@ -1,3 +1,5 @@
+## File Name: mdmb_regression.R
+## File Version: 1.733
 
 
 mdmb_regression <- function( formula , data , type , weights = NULL,
@@ -11,6 +13,10 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	weights <- res$weights
 	Xdes <- stats::model.matrix( object=formula , data=data )
 	N <- nrow(Xdes)	
+	
+	index_beta <- NULL
+	index_thresh <- NULL
+	
 	offset_values <- offset_values_extract(formula=formula, data=data )
 	Ndes <- ncol(Xdes)
 	parnames <- colnames(Xdes)
@@ -20,10 +26,26 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	dv_var <- as.character( formula[[2]] )
 	y <- data[,dv_var]
 	#*** lambda fixed
-	is_lambda_fixed <- TRUE
+	is_lambda_fixed <- TRUE	
 	if (  ( type %in% c("yjt","bct") ) & ( is.null( lambda_fixed ) ) ){
 		is_lambda_fixed <- FALSE
 	}	
+	#-- probit model
+	if ( type %in% "oprobit"){
+		K <- max(y, na.rm=TRUE)
+		t1 <- cumsum( prop.table(table(y)) )
+		thresh_init <- stats::qnorm( t1[ - c(K+1) ] )
+		thresh_init <- thresh_init - thresh_init[1]
+		thresh_init <- thresh_init[-1]
+		thresh_init_diff <- c(thresh_init[1], diff(thresh_init) )
+		thresh_init <- log( thresh_init_diff )
+		if (K>=2){
+			names(thresh_init) <- paste0("difflogthresh",2:K)		
+		} else {
+			thresh_init <- NULL
+		}
+	}	
+	
 	#--- starting values parameters
 	if ( is.null(beta_init) ){
 		par <- rep(0,Ndes)
@@ -42,8 +64,23 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 			} else {
 				par <- c( par , sd_y , 1 )
 			}
+		}
+		#** ordinal probit model
+		if ( type %in% c("oprobit") ){
+			par <- c( par0, thresh_init )							
 		}		
-	} else {
+	}
+	
+	if (type %in% c("oprobit") ){
+		index_beta <- 1:Ndes
+		if (K>=2){
+			index_thresh <- Ndes + seq(1,length(thresh_init))		
+		} else {
+			index_thresh <- NULL
+		}		
+	}
+	
+	if ( ! is.null(beta_init) ){
 		par <- beta_init
 	}
 	
@@ -53,6 +90,8 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	}
 	
 	x <- par	
+	parnames <- names(par)
+	np <- length(x)
 	eps <- 1E-50
 	index_sigma <- NULL
 	index_lambda <- NULL
@@ -64,7 +103,6 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	#*** logistic regression
 	if ( type=="logistic"){
 		description <- "Logistic regression"
-		np <- length(x)
 		index_beta <- 1:np
 		#--- optimization function
 		fct_optim <- function(x){
@@ -95,7 +133,6 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	#***********************************
 	#*** yjt regression
 	if ( type %in% c("yjt","bct") ){
-		np <- length(x)
 		index_beta <- seq(1,np-2 + is_lambda_fixed)
 		index_sigma <- np - 1 + is_lambda_fixed
 		if ( ! is_lambda_fixed){
@@ -119,7 +156,7 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 			shape <- res$shape
 			lambda <- res$lambda
 			y_pred <- Xdes %*% beta + offset_values
-			ll_i <- dens_fct( y , location=y_pred, shape=shape, lambda=lambda, df = df, log=TRUE )
+			ll_i <- dens_fct( y , location=y_pred, shape=shape, lambda=lambda, df = df, log=TRUE )			
 			ll <- - sum( weights * ll_i )
 			#--- include prior distributions
 			if (is_prior){
@@ -163,13 +200,61 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 			return(x_grad)
 		}		
 	}
-	#***********************************					
-
+	#***********************************
+	#*** ordinal probit model
+	if ( type=="oprobit"){
+		description <- "Ordinal Probit Regression"
+		a0 <- .01
+		NT <- length(index_thresh)
+		
+		#--- optimization function
+		fct_optim <- function(x){
+			beta <- x[ index_beta ]
+			logthresh <- x[ index_thresh ]	
+			thresh <- logthresh_2_thresh(x=logthresh)
+			ypred <- Xdes %*% beta + offset_values			
+			ll_i <- mdmb_regression_oprobit_density( y=y, ypred=ypred, thresh=thresh, log=TRUE, eps=eps)
+			ll <- - sum( weights * ll_i )		
+			#--- output
+			return(ll)
+		}
+		#--- gradient
+		grad_optim2 <- function(x){
+			beta <- x[ index_beta ]
+			logthresh <- x[ index_thresh ]
+			thresh <- logthresh_2_thresh(x=logthresh)
+			xgrad <- rep(0, length(x) )
+			ypred <- Xdes %*% beta + offset_values	
+			ll0 <- mdmb_regression_oprobit_density( y=y, ypred=ypred, thresh=thresh, 
+							log = TRUE , eps = eps )
+			ll1 <- mdmb_regression_oprobit_density( y=y, ypred=ypred+h, thresh=thresh, 
+							log = TRUE , eps = eps )						
+			der1 <- - mdmb_diff_quotient(ll0=ll0, ll1=ll1, h=h)
+			wder1 <- weights * der1[,1]
+			xgrad[index_beta] <- colSums( wder1 * Xdes )
+			#-- derivatives for thresholds
+			if (NT>0){
+				for (ii in 1:NT){
+					logthresh0 <- logthresh
+					logthresh0[ii] <- logthresh[ii] + h
+					thresh0 <- logthresh_2_thresh(x=logthresh0)
+					ll1 <- mdmb_regression_oprobit_density( y=y, ypred=ypred, thresh=thresh0, 
+								log = TRUE , eps = eps )						
+					der1 <- - mdmb_diff_quotient(ll0=ll0, ll1=ll1, h=h)
+					xgrad[ index_thresh[ii] ] <- sum( weights * der1[,1] )		
+				}						
+			}
+			return(xgrad)
+		}    		
+		
+	}	
+		
 	#--- compute gradient 
 	grad_optim <- function(x){
 		xh <- CDM::numerical_Hessian( par = x , FUN = fct_optim , gradient=TRUE , hessian = FALSE)
 		return(xh)
 	}	
+
 	if ( use_grad == 0){
 		grad_optim <- NULL
 	}
@@ -177,10 +262,6 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 		grad_optim <- grad_optim2
 	}
 
-# Revalpr("grad_optim(par)")
-# Revalpr("grad_optim2(par)")
- 
-	
 	#-------------------------------------------
 	#---- optimization using optim
 	mod1 <- stats::optim( par=par , fn=fct_optim , gr = grad_optim, method = "L-BFGS-B", 
@@ -188,9 +269,16 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 				
 	#--- extract parameters
 	beta <- mdmb_regression_extract_parameters( mod=mod1 , parnames=parnames , 
-				type=type , is_lambda_fixed=is_lambda_fixed , 
-				lambda_fixed = lambda_fixed )			
-			
+				type=type , is_lambda_fixed=is_lambda_fixed , lambda_fixed = lambda_fixed )			
+
+	#--- thresholds
+	thresh <- NULL
+	if (type=="oprobit"){
+		thresh <- c( 0 , logthresh_2_thresh(x=beta[index_thresh] ) )
+		names(thresh) <- paste0("thresh", 1:K)
+	}
+				
+				
 	#--- extract log-likelihood, log prior and log-posterior
 	res0 <- mdmb_regression_loglike_logpost(mod=mod1, beta=beta , 
 				beta_prior=beta_prior, is_prior=is_prior, type=type, 
@@ -209,12 +297,14 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	
 	#---- individual likelihood
 	loglike_case <- mdmb_regression_loglike_case(y=y, linear.predictor=linear.predictor, 
-						fitted.values=fitted.values, type=type , beta = beta , df=df )				
+						fitted.values=fitted.values, type=type , beta = beta , df=df,
+						index_beta=index_beta, index_thresh=index_thresh)				
 						
 	#---- information criteria
 	deviance <- - 2 * loglike
 	ic <- mdmb_regression_ic( N=N, beta=beta , deviance=deviance , type=type,
-				index_beta = index_beta, index_sigma=index_sigma , index_lambda=index_lambda )
+				index_beta = index_beta, index_sigma=index_sigma , index_lambda=index_lambda,
+				index_thresh=index_thresh )
 	
 	#---- summary table
 	partable <- mdmb_regression_summary_table( beta=beta, vcov1=vcov1 )
@@ -226,15 +316,13 @@ mdmb_regression <- function( formula , data , type , weights = NULL,
 	
 	#--- output	
 	res <- list(coefficients=beta, vcov = vcov1,
-			partable = partable , 
-			y = y , X = Xdes , weights = weights , 
+			partable = partable , y = y , X = Xdes , weights = weights , 
 			fitted.values = fitted.values , linear.predictor = linear.predictor , 
-			loglike = loglike , deviance = deviance , 
-			logprior = logprior , logpost = logpost , 
-			like_case = loglike_case ,  ic = ic , formula = formula , 
-			offset_values = offset_values , 
-			R2 = R2 , parnames = parnames , beta_prior = beta_prior , df = df , 
-			is_prior = is_prior , fct_optim = fct_optim, type = type , 
+			loglike = loglike , deviance = deviance , logprior = logprior , logpost = logpost , 
+			like_case = loglike_case ,  ic = ic , formula = formula , offset_values = offset_values , 
+			thresh=thresh, 	R2 = R2 , parnames = parnames , beta_prior = beta_prior , df = df , 
+			index_beta=index_beta, index_sigma=index_sigma, index_lambda=index_lambda, 
+			index_thresh=index_thresh, is_prior = is_prior , fct_optim = fct_optim, type = type , 
 			CALL = CALL , converged = mod1$converged , 
 			iter = mod1$counts["function"] , description = description , s1=s1, s2=s2
 			)

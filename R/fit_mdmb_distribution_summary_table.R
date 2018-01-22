@@ -1,3 +1,5 @@
+## File Name: fit_mdmb_distribution_summary_table.R
+## File Version: 0.18
 
 fit_mdmb_distribution_summary_table <- function( beta, vcov1 )
 {	

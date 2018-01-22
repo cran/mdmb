@@ -1,3 +1,5 @@
+## File Name: mdmb_regression_summary.R
+## File Version: 0.29
 
 
 #*******************************************************
@@ -33,7 +35,9 @@ mdmb_regression_summary <- function( object , digits = 4 , file=NULL , ...){
 		
     cat( "  Number of estimated beta parameters = " , object$ic$np.beta , "\n" )    	
 	cat( "  Number of estimated sigma parameters = " , object$ic$np.sigma , "\n" )    		
-	cat( "  Number of estimated lambda parameters = " , object$ic$np.lambda , "\n\n" )  
+	cat( "  Number of estimated lambda parameters = " , object$ic$np.lambda , "\n" ) 
+	cat( "  Number of estimated threshold parameters = " , object$ic$np.thresh , "\n" ) 
+	cat("\n")	
 	
 	cat( "AIC  = " , round( object$ic$AIC , 2 ) , " | penalty =" , 
 				round( object$ic$AIC - object$ic$deviance ,2 ) , 
@@ -57,14 +61,21 @@ mdmb_regression_summary <- function( object , digits = 4 , file=NULL , ...){
 		obji[,ii] <- round( obji[,ii] , digits)
 	}
 	print(obji)		
-	# cat("\n")
+	cat("\n")
 	
-    cat("\n")
-	#-----------------------------------------
+	#*** print thresholds
+	if (type %in% c("oprobit") ){
+		cat("-----------------------------------------------------------------\n")
+		cat("Threshold Parameters\n")	
+		print( round( object$thresh , digits ) )
+		cat("\n")
+	}		
+	
+    #-----------------------------------------
 	# Explained Variance
 	
 	#*** logistic regression	
-	if (type=="logistic"){
+	if (type %in% c("logistic", "oprobit") ){
 		cat("Pseudo R-Square (McKelvey & Zavoina) =" , 
 			round( object$R2 , digits ) , "\n" )
 	}

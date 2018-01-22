@@ -1,3 +1,5 @@
+## File Name: plot.frm_fb.R
+## File Version: 0.04
 
 plot.frm_fb <- function(x , idparm=NULL, ask=TRUE, ... )
 {

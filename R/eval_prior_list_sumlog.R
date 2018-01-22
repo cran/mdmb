@@ -1,3 +1,5 @@
+## File Name: eval_prior_list_sumlog.R
+## File Version: 0.08
 
 
 eval_prior_list_sumlog <- function( par , par_prior, use_grad=1 )

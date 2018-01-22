@@ -1,3 +1,5 @@
+## File Name: frm_formula_extract_terms.R
+## File Version: 0.05
 
 frm_formula_extract_terms <- function(formula)
 {

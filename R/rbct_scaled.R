@@ -1,3 +1,5 @@
+## File Name: rbct_scaled.R
+## File Version: 0.02
 
 rbct_scaled <- function(n , location=0, shape=1, lambda = 1, df=Inf)
 {

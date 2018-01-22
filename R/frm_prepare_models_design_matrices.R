@@ -1,3 +1,5 @@
+## File Name: frm_prepare_models_design_matrices.R
+## File Version: 0.05
 
 frm_prepare_models_design_matrices <- function( ind0 , dat , NM )
 {

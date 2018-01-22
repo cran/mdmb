@@ -1,3 +1,5 @@
+## File Name: dyjt_scaled_log_multiplication.R
+## File Version: 0.03
 
 dyjt_scaled_log_multiplication <- function( dy , yt , use_log )
 {

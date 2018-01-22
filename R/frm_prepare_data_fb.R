@@ -1,3 +1,5 @@
+## File Name: frm_prepare_data_fb.R
+## File Version: 0.10
 
 frm_prepare_data_fb <- function(dat, dep, ind, weights0, dat0, data_init )
 {

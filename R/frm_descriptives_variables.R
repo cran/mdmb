@@ -1,3 +1,5 @@
+## File Name: frm_descriptives_variables.R
+## File Version: 0.08
 
 frm_descriptives_variables <- function(dat , predictorMatrix,
 		freq_miss_values, dat0 )

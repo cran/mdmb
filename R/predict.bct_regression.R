@@ -1,3 +1,5 @@
+## File Name: predict.bct_regression.R
+## File Version: 0.02
 
 predict.bct_regression <- function( object , newdata = NULL, trafo=TRUE, ...)
 {	

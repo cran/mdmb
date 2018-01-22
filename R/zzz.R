@@ -1,3 +1,5 @@
+## File Name: zzz.R
+## File Version: 0.04
 #  zzz.R
 #
 # This function is simply copied from the mice package.

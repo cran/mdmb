@@ -1,3 +1,5 @@
+## File Name: frm_em_score_function_prepare_model.R
+## File Version: 0.10
 
 
 frm_em_score_function_prepare_model <- function(mm, model_results,

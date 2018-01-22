@@ -1,3 +1,5 @@
+## File Name: predict.logistic_regression.R
+## File Version: 0.13
 
 predict.logistic_regression <- function( object , newdata = NULL , ...)
 {	

@@ -1,3 +1,5 @@
+## File Name: frm_em_ic.R
+## File Version: 0.06
 
 frm_em_ic <- function(ll_new , N , ind0, model_results)
 {

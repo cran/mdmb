@@ -2,7 +2,7 @@
 #### Model Based Treatment of Missing Data
 
 
-If you use `mdmb` and have suggestions for improvement or have found bugs, please email me at robitzsch@ipn.uni.kiel.de.
+If you use `mdmb` and have suggestions for improvement or have found bugs, please email me at robitzsch@ipn.uni-kiel.de.
 
 #### CRAN version
 
@@ -10,7 +10,7 @@ The official version of `mdmb` is hosted on CRAN and may be found [here](https:/
 The CRAN version can be installed from within R using:
 
 ```r
-install.packages("mdmb")
+utils::install.packages("mdmb")
 ```
 
 #### GitHub version
@@ -19,6 +19,6 @@ The version hosted [here](https://github.com/alexanderrobitzsch/mdmb) is the dev
 The GitHub version can be installed using `devtools` as:
 
 ```r
-install.packages("devtools")
+utils::install.packages("devtools")
 devtools::install_github("alexanderrobitzsch/mdmb")
 ```

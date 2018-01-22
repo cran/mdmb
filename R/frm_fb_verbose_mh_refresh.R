@@ -1,3 +1,5 @@
+## File Name: frm_fb_verbose_mh_refresh.R
+## File Version: 0.03
 
 frm_fb_verbose_mh_refresh <- function( verbose , iter )
 {

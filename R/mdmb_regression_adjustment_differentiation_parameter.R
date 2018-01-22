@@ -1,3 +1,5 @@
+## File Name: mdmb_regression_adjustment_differentiation_parameter.R
+## File Version: 0.01
 
 mdmb_regression_adjustment_differentiation_parameter <- function(h , par )
 {

@@ -1,3 +1,5 @@
+## File Name: dt_scaled.R
+## File Version: 0.07
 
 dt_scaled <- function( x , location=0, shape=1, df = Inf, log=FALSE )
 {

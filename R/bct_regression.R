@@ -1,3 +1,5 @@
+## File Name: bct_regression.R
+## File Version: 0.03
 
 
 bct_regression <- function( formula , data , weights = NULL,
