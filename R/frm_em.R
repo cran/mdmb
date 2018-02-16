@@ -1,5 +1,5 @@
 ## File Name: frm_em.R
-## File Version: 0.888
+## File Version: 0.907
 
 
 frm_em <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
@@ -48,17 +48,16 @@ frm_em <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
 	beta_new <- 0	
 	iterate <- TRUE
 	conv1 <- conv2 <- FALSE	
+		
 	
 	#**** EM algorithm
 	while( iterate ){		
 		ll_old <- ll_new
 		beta_old <- beta_new
 		
-			# tictoc::tic("--- calc like")		
 		res <- frm_em_calc_likelihood( dat=dat, ind0=ind0 , NM=NM, iter = iter,
 					weights0=weights0 , dat_resp=dat_resp, ind_resp=ind_resp,
 					ind_miss=ind_miss )			
-			# tictoc::toc()				
 		ind0 <- res$ind0		
 		dat$weights <- res$post * dat$weights0
 		like <- res$like
@@ -81,8 +80,14 @@ frm_em <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
 			utils::flush.console()
 		}
 		if (iter >= maxiter){ iterate <- FALSE }
-		if (ll_change < conv_dev){ iterate <- FALSE ; conv1 <- TRUE}
-		if (beta_change < conv_parm){ iterate <- FALSE ; conv2 <- TRUE}
+		if ( (ll_change < conv_dev) & (beta_change < conv_parm) ){
+			iterate <- FALSE
+		}		
+		if (ll_change < conv_dev){ 
+			conv1 <- TRUE
+			iterate <- FALSE
+		}
+		if (beta_change < conv_parm){ conv2 <- TRUE}
 		conv <- conv1 & conv2 			
 	}
 	#***************************************
@@ -95,7 +100,7 @@ frm_em <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
 
 	#--- computation asymptotic covariance matrix
 	res0 <- frm_em_avcov(res=res, dat=dat, ind0=ind0, NM=NM, h=h)	
- 
+	
 	if (verbose){
 		cat("\n")
 		utils::flush.console()

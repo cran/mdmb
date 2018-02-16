@@ -1,8 +1,8 @@
 Package: mdmb
 Type: Package
 Title: Model Based Treatment of Missing Data
-Version: 0.5-27
-Date: 2018-01-22 11:39:54
+Version: 0.6-17
+Date: 2018-02-16 12:00:17
 Author: 
     Alexander Robitzsch [aut, cre], Oliver Luedtke [aut]
 Maintainer: Alexander Robitzsch <robitzsch@ipn.uni-kiel.de>
@@ -18,6 +18,6 @@ Suggests: mice
 URL: https://github.com/alexanderrobitzsch/mdmb
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2018-01-22 10:40:09 UTC; sunpn563
+Packaged: 2018-02-16 11:00:32 UTC; sunpn563
 Repository: CRAN
-Date/Publication: 2018-01-22 10:47:08 UTC
+Date/Publication: 2018-02-16 11:10:29 UTC
