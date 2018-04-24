@@ -1,5 +1,5 @@
 
-# useDynLib(mdmb)
+useDynLib(mdmb)
 
 
 
@@ -14,6 +14,7 @@
 
 importFrom(graphics, par)
 importFrom(graphics, plot)
+importFrom(Rcpp, evalCpp)
 importFrom(stats, as.formula)
 importFrom(stats, coef)
 importFrom(stats, cov)
@@ -63,6 +64,7 @@ importFrom(CDM, numerical_Hessian)
 importFrom(CDM, osink)
 importFrom(coda, effectiveSize)
 importFrom(coda, mcmc)
+importFrom(miceadds, datalist2mids)
 importFrom(miceadds, datlist_create)
 importFrom(sirt, mcmc_Rhat)
 importFrom(sirt, rowCumsums.sirt)

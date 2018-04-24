@@ -1,5 +1,5 @@
 %% File Name: mdmb-package.Rd
-%% File Version: 0.17
+%% File Version: 0.22
 
 \name{mdmb-package}
 \alias{mdmb-package}
@@ -13,9 +13,10 @@ Model Based Treatment of Missing Data
 \description{
     Contains model-based treatment of missing data for regression models 
     with missing values in covariates or the dependent variable 
-    using maximum likelihood or Bayesian estimation. The regression 
-    model can be nonlinear (e.g., including interaction or quadratic
-    effects). Multiple imputation can be also conducted.
+    using maximum likelihood or Bayesian estimation (Ibrahim et al., 2005;
+    <doi:10.1198/016214504000001844>). The regression model can be nonlinear
+    (e.g., including interaction or quadratic effects). 
+    Multiple imputation can be also conducted.
 }
 
 \details{
@@ -43,8 +44,11 @@ URL: \url{https://sites.google.com/site/alexanderrobitzsch/}
 }
 
 
-%\references{
-%}
+\references{
+Ibrahim, J. G., Chen, M. H., Lipsitz, S. R., & Herring, A. H. (2005). 
+Missing-data methods for generalized linear models: A comparative review. 
+\emph{Journal of the American Statistical Association, 100}, 332-346.
+}
 
 
 
@@ -57,7 +61,7 @@ found in the \code{norm2::mcmcNorm} function.
 See the \pkg{lavaan}, \pkg{OpenMx} or \pkg{sem} packages for full information 
 maximum likelihood approaches for handling missing data for multivariate
 normal distributions, linear regression models, and, more generally, 
-structural equation modelling with missing data.
+structural equation modeling with missing data.
 
 Structural equation models with missing data can be also estimated with a
 two-stage procedure. In a first stage, a mean vector and a covariance matrix
