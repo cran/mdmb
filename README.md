@@ -6,9 +6,10 @@ If you use `mdmb` and have suggestions for improvement or have found bugs, pleas
 
 #### CRAN version
 
+<!---
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mdmb)](https://cran.r-project.org/package=mdmb)
 &#160;&#160;
-
+-->
 
 The official version of `mdmb` is hosted on CRAN and may be found [here](https://cran.r-project.org/package=mdmb). 
 The CRAN version can be installed from within R using:

@@ -1,5 +1,5 @@
 %% File Name: data.mb.Rd
-%% File Version: 0.13
+%% File Version: 0.21
 
 \name{data.mb}
 \alias{data.mb}
@@ -7,6 +7,7 @@
 \alias{data.mb01}
 \alias{data.mb02}
 \alias{data.mb03}
+\alias{data.mb04}
 
 \docType{data}
 
@@ -23,6 +24,7 @@ Example datasets for \pkg{mdmb} package.
 data(data.mb01)
 data(data.mb02)
 data(data.mb03)
+data(data.mb04)
 }
 
 
@@ -58,15 +60,24 @@ variables \code{Z} and \code{Y} are dichotomous.
 \code{  ..$ Y: num [1:2000] 1 1 0 1 1 0 1 0 0 1 ...} \cr
 
 
-\item Dataset \code{data.mb03}. This dataset is from Enders, Baraldi & Cham (2014) 
+\item Dataset \code{data.mb03}. This dataset is from Enders, Baraldi & Cham (2014)
 and contains three
 variables primary school reading (\code{x}), primary school learning problems (\code{z})
 and middle school reading (\code{y}) which all have missing values.
-                                                                   
+
 \code{'data.frame':   74 obs. of  3 variables:} \cr
 \code{ $ x: num  NA NA NA NA NA 8.34 NA 8.36 6.89 8.56 ...} \cr
 \code{ $ z: num  8.81 4.5 6.31 4.7 5.1 4 6.11 3.7 6.81 6.31 ...} \cr
 \code{ $ y: num  5 5.1 6.3 9 9 9.3 NA 10.7 6.2 NA ...} \cr
+
+\item Dataset \code{data.mb04}. This multilevel dataset contains three variables:
+level-1 variables code{y}, \code{x} and the level-2 variable \code{w}.
+
+\code{'data.frame':   500 obs. of  4 variables:} \cr
+\code{ $ idcluster: int  1 1 1 1 1 2 2 2 2 2 ...} \cr
+\code{ $ x        : num  NA NA -1.15 -1.65 0.25 ...} \cr
+\code{ $ w        : num  -0.552 -0.552 -0.552 -0.552 -0.552 ...} \cr
+\code{ $ y        : num  NA NA -0.0711 0.7165 -0.1917 ...} \cr
 
 
 }
@@ -81,7 +92,7 @@ and middle school reading (\code{y}) which all have missing values.
 %}
 
 \references{
-Enders, C. K., Baraldi, A. N., & Cham, H. (2014). Estimating interaction effects with 
+Enders, C. K., Baraldi, A. N., & Cham, H. (2014). Estimating interaction effects with
 incomplete predictor variables. \emph{Psychological Methods, 19}(1), 39-55.
 }
 
@@ -105,13 +116,13 @@ dat <- data.mb03
 #--- center data which speeds convergence of Bayesian estimation
 #--- of the imputation model
 for (vv in 1:3){
-    M_vv <- mean( dat[,vv] , na.rm=TRUE )
+    M_vv <- mean( dat[,vv], na.rm=TRUE )
     dat[,vv] <- dat[,vv] - M_vv
 }
 
 #--- generate initial imputed values withj mice package
-imp <- mice::mice( dat , m= , maxit=20 )
-data_init <- mice::complete(imp , action=1)
+imp <- mice::mice( dat, m=, maxit=20 )
+data_init <- mice::complete(imp, action=1)
 
 #--- define number of iterations and number of imputed datasets
 iter <- 50000; burnin <- 5000
@@ -120,17 +131,17 @@ Nimp <- 100
 #******* imputation model M3 with quadratic effects
 
 # model for dependent variable
-dep <- list("model" = "linreg" , "formula" = y ~ x*z + I(x^2) + I(z^2) )
+dep <- list("model"="linreg", "formula"=y ~ x*z + I(x^2) + I(z^2) )
 # covariate models
-ind_x <- list( "model" = "linreg" , "formula" = x ~ z + I(z^2) )
-ind_z <- list( "model" = "linreg" , "formula" = z ~ 1 )
-ind <- list( x = ind_x , z = ind_z)
+ind_x <- list( "model"="linreg", "formula"=x ~ z + I(z^2) )
+ind_z <- list( "model"="linreg", "formula"=z ~ 1 )
+ind <- list( x=ind_x, z=ind_z)
 
 #generate imputations
 imp <- mdmb::frm_fb(dat=dat, dep=dep, ind=ind, burnin=burnin, iter=iter,
               data_init=data_init, Nimp=Nimp)
 
-#--- create list of multiply imputed datasets 
+#--- create list of multiply imputed datasets
 datlist <- mdmb::frm2datlist(imp)
 
 #-------------------------------
@@ -149,7 +160,7 @@ results <- list()
 variances <- list()
 Nimp <- length(datlist)
 for (ii in 1:Nimp){
-    mod_ii <- stats::lm( y ~ x*z, data = datlist[[ii]] )
+    mod_ii <- stats::lm( y ~ x*z, data=datlist[[ii]] )
     variances[[ii]] <- sandwich::vcovHC(mod_ii)
     results[[ii]] <- coef(mod_ii)
 }
