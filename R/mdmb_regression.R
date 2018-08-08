@@ -1,9 +1,9 @@
 ## File Name: mdmb_regression.R
-## File Version: 1.787
+## File Version: 1.812
 
 
 mdmb_regression <- function( formula, data, type, weights=NULL,
-    beta_init=NULL, beta_prior=NULL, df=Inf, lambda_fixed=NULL,
+    beta_init=NULL, beta_prior=NULL, df=Inf, lambda_fixed=NULL, probit=FALSE,
     use_grad=2, h=1E-4, control=NULL )
 {
     CALL <- match.call()
@@ -50,13 +50,17 @@ mdmb_regression <- function( formula, data, type, weights=NULL,
     #--- starting values parameters
     if ( is.null(beta_init) ){
         par <- rep(0,Ndes)
+        y1 <- y
+        if (probit){
+            y1 <- stats::qlogis(y1)
+        }
         if (use_grad %in% c(1,2) ){
-            mod <- stats::lm.wfit( y=y, x=Xdes, w=weights)
+            mod <- stats::lm.wfit( y=y1, x=Xdes, w=weights)
             par0 <- mod$coefficients
-            sd_y <- stats::sd( mod$residuals )
+            sd_y <- TAM::weighted_sd( x=mod$residuals, w=weights )
             par <- par0
         } else {
-            sd_y <- stats::sd(y)
+            sd_y <- TAM::weighted_sd( x=y1, w=weights )
         }
         #** starting values yjt and bct regression
         if ( type %in% c("yjt","bct") ){
@@ -145,12 +149,17 @@ mdmb_regression <- function( formula, data, type, weights=NULL,
         }
         eps_shape <- .01
         if (type=="yjt"){
-            description <- paste0( "Scaled t regression with Yeo-Johnson transformation (df=", df, ")")
+            if (probit){
+                description <- paste0("Scaled t regression with Probit Yeo-Johnson transformation (df=", df, ")")
+            } else {
+                description <- paste0("Scaled t regression with Yeo-Johnson transformation (df=", df, ")")
+            }
+
             dens_fct <- dyjt_scaled
         }
         if (type=="bct"){
             description <- paste0( "Scaled t regression with Box-Cox transformation (df=", df, ")")
-            dens_fct <- dbct_scaled
+            dens_fct <- dbct_scaled_mdmb_regression_wrapper
         }
 
         #--- define optimization function
@@ -161,8 +170,9 @@ mdmb_regression <- function( formula, data, type, weights=NULL,
             shape <- res$shape
             lambda <- res$lambda
             y_pred <- Xdes %*% beta + offset_values
-            ll_i <- dens_fct( y, location=y_pred, shape=shape, lambda=lambda, df=df, log=TRUE )
+            ll_i <- dens_fct( y, location=y_pred, shape=shape, lambda=lambda, df=df, log=TRUE, probit=probit )
             ll <- - sum( weights * ll_i )
+
             #--- include prior distributions
             if (is_prior){
                 ll <- ll - eval_prior_list_sumlog( par=x, par_prior=beta_prior, use_grad=use_grad )
@@ -179,22 +189,22 @@ mdmb_regression <- function( formula, data, type, weights=NULL,
             lambda <- res$lambda
             y_pred <- Xdes %*% beta + offset_values
             x_grad <- rep(NA, np )
-            ll0 <- ll_i <- dens_fct( y, location=y_pred, shape=shape, lambda=lambda, df=df, log=TRUE )
+            ll0 <- ll_i <- dens_fct( y, location=y_pred, shape=shape, lambda=lambda, df=df, log=TRUE, probit=probit )
             hvec <- mdmb_regression_adjustment_differentiation_parameter(h=h, par=x )
             #*** derivative with respect to beta
             h0 <- hvec[ index_sigma ]
             # derivative with respect to mu (apply chain rule)
-            ll1 <- dens_fct( y, location=y_pred+h0, shape=shape, lambda=lambda, df=df, log=TRUE )
+            ll1 <- dens_fct( y, location=y_pred+h0, shape=shape, lambda=lambda, df=df, log=TRUE, probit=probit )
             der1 <- - mdmb_diff_quotient(ll0=ll0, ll1=ll1, h=h0)
             wder1 <- weights * der1
             x_grad[index_beta] <- colSums( wder1 * Xdes )
             #*** derivative with respect to sigma
-            ll1 <- dens_fct( y, location=y_pred, shape=shape+h0, lambda=lambda, df=df, log=TRUE )
+            ll1 <- dens_fct( y, location=y_pred, shape=shape+h0, lambda=lambda, df=df, log=TRUE, probit=probit )
             der1 <- - mdmb_diff_quotient(ll0=ll0, ll1=ll1, h=h0)
             x_grad[index_sigma] <- sum( der1 * weights )
             #*** derivative with respect to lambda
             if ( ! is_lambda_fixed ){
-                ll1 <- dens_fct( y, location=y_pred, shape=shape, lambda=lambda+h0, df=df, log=TRUE )
+                ll1 <- dens_fct( y, location=y_pred, shape=shape, lambda=lambda+h0, df=df, log=TRUE, probit=probit )
                 der1 <- - mdmb_diff_quotient(ll0=ll0, ll1=ll1, h=h0)
                 x_grad[index_lambda] <- sum( der1 * weights )
             }
@@ -333,7 +343,7 @@ mdmb_regression <- function( formula, data, type, weights=NULL,
 
     #---- calculate R^2
     R2 <- mdmb_regression_R2( linear.predictor=linear.predictor,  y=y,
-                type=type, beta=beta, index_sigma=index_sigma )
+                type=type, beta=beta, index_sigma=index_sigma, probit=probit )
     s2 <- Sys.time()
 
     #--- output
@@ -345,7 +355,7 @@ mdmb_regression <- function( formula, data, type, weights=NULL,
             thresh=thresh,     R2=R2, parnames=parnames, beta_prior=beta_prior, df=df,
             index_beta=index_beta, index_sigma=index_sigma, index_lambda=index_lambda,
             index_thresh=index_thresh, is_prior=is_prior, fct_optim=fct_optim, type=type,
-            CALL=CALL, converged=mod1$converged, result_optim=result_optim,
+            CALL=CALL, converged=mod1$converged, result_optim=result_optim, probit=probit,
             iter=mod1$counts["function"], description=description, s1=s1, s2=s2, diff_time=s2-s1
             )
     class(res) <- "mdmb_regression"
