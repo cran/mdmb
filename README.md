@@ -7,7 +7,7 @@ If you use `mdmb` and have suggestions for improvement or have found bugs, pleas
 #### CRAN version
 
 <!---
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mdmb)](https://cran.r-project.org/package=mdmb)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-last-release/mdmb)](https://cran.r-project.org/package=mdmb)
 &#160;&#160;
 -->
 

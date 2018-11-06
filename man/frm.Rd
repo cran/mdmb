@@ -1,5 +1,5 @@
 %% File Name: frm.Rd
-%% File Version: 0.811
+%% File Version: 0.813
 
 \name{frm}
 \alias{frm}
@@ -289,8 +289,7 @@ based on a joint modeling framework.
 Substantive model compatible imputation based
 on fully conditional specification can be found in the \pkg{smcfcs} package
 (see Bartlett et al., 2015; Bartlett & Morris, 2015)
-or the Blimp stand-alone software
-(Keller & Enders, 2018).
+or the Blimp stand-alone software (Keller & Enders, 2018).
 }
 
 % \code{\link[jomo:jomo.lm]{jomo::jomo.lm}}
