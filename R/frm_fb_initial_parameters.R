@@ -1,5 +1,5 @@
 ## File Name: frm_fb_initial_parameters.R
-## File Version: 0.413
+## File Version: 0.444
 
 frm_fb_initial_parameters <- function(dat, ind0, data_init, ind_miss=NULL )
 {
@@ -17,7 +17,6 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init, ind_miss=NULL )
     for (mm in 1:NM1){
         ind_mm <- ind0[[mm]]
         var_mm <- ind_mm$dv_vars
-# cat("\n------ mm=", mm, "----- var_mm ", var_mm, " ---- \n")
         ind_miss_mm <- ind_miss[[ var_mm ]]
         model_mm <- ind_mm$model
         parms0 <- parms00
@@ -61,7 +60,8 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init, ind_miss=NULL )
         }
         mod <- do.call( what=ind_mm$R_fct, args=R_args )
         model_results[[mm]] <- mod
-        se_mod <- mdmb_vcov2se(vcov=vcov(mod))
+        # se_mod <- mdmb_vcov2se(vcov=vcov(mod))
+        se_mod <- frm_fb_initial_parameters_se_sd_proposal(mod=mod)
         ind_mm$N_coef <- length(se_mod)
         ind_mm$coef <- coef(mod)
         ind_mm$coef_sd_proposal <- se_mod
@@ -72,6 +72,13 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init, ind_miss=NULL )
             on1 <- rep(" ON ", NM )
             if (ind_mm$model %in% c("bctreg","yjtreg") ){
                 on1[ (NM-1):NM ] <- " "
+                ind_mm$index_lambda <- mod$index_lambda
+                ind_mm$index_df <- mod$index_df
+                ind_mm$est_df <- mod$est_df
+                ind_mm$df_min <- mod$df_min
+                ind_mm$df_max <- mod$df_max
+                ind_mm$logdf_min <- log(mod$df_min)
+                ind_mm$logdf_max <- log(mod$df_max)
             }
             ind_mm$coef_parnames <- paste0( var_mm, on1, names_mm )
         }
@@ -82,7 +89,6 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init, ind_miss=NULL )
         v1 <- 0*coef(mod)
         ind_mm$coef_MH$accepted <- v1
         ind_mm$coef_MH$iter <- v1
-
         ind_mm$N_sigma <- 0
         ind_mm$sigma_parnames <- NULL
         ind_mm$sample_sigma <- FALSE
@@ -92,7 +98,7 @@ frm_fb_initial_parameters <- function(dat, ind0, data_init, ind_miss=NULL )
             est_sigma <- FALSE
         }
         if ( est_sigma ){
-            sigma <- mdmb_weighted_sd(x=residuals(mod), w=weights, 
+            sigma <- mdmb_weighted_sd(x=residuals(mod), w=weights,
                         unbiased=TRUE, na.rm=TRUE)
             ind_mm$N_sigma <- 1
             ind_mm$sample_sigma <- TRUE

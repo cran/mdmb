@@ -1,5 +1,5 @@
 ## File Name: frm_fb.R
-## File Version: 0.7898
+## File Version: 0.7934
 
 ### Factored regression model
 ### Fully Bayesian estimation
@@ -49,7 +49,7 @@ frm_fb <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
     #        * no adaptations are needed
     #
     #*****************----------------
-    
+
     #*** prepare models
     res <- frm_prepare_models(dep=dep, ind=ind, dat0=dat, nodes_weights=FALSE, use_gibbs=use_gibbs,
                 weights=weights)
@@ -63,7 +63,7 @@ frm_fb <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
         weights0 <- rep(1,N)
     }
     dat0 <- dat
-    
+
     #*** prepare data
     res2 <- frm_prepare_data_fb(dat=dat, dep=dep, ind=ind, weights0=weights0,
                     dat0=dat0, data_init=data_init )
@@ -81,7 +81,7 @@ frm_fb <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
     NM <- attr(ind,"NM")
     ind0 <- ind
     ind0[[ dep$dv_vars ]] <- dep
-    
+
     #*** fixed standard deviations
     ind0 <- frm_prepare_models_sigma_fixed( ind0=ind0, NM=NM, dat0=dat0, dat=dat )
 
@@ -94,23 +94,23 @@ frm_fb <- function(dat, dep, ind, weights=NULL, verbose=TRUE,
     model_results <- res3$model_results
     npars <- res3$npars
     dat <- res3$dat
-    
+
     #**** allocate matrices with sampled values for parameters
     parms_mcmc <- frm_fb_init_matrices_saved_parameters( iter=iter, burnin=burnin,
                         Nsave=Nsave, Nimp=Nimp, npars=npars, parms=parms,
                         parms_index=parms_index, predictorMatrix=predictorMatrix )
     iter <- parms_mcmc$iter
     burnin <- parms_mcmc$burnin
-    
+
     #**** inits objects for imputations
     imputations_mcmc <- frm_fb_init_imputations( Nimp=Nimp, model_results=model_results,
                             iter=iter, burnin=burnin, impute_vars=impute_vars,
                             impute_vars_index=impute_vars_index, ind_miss=ind_miss,
                             dv_vars=dv_vars, ind0=ind0, variablesMatrix=variablesMatrix,
                             dat=dat)
+
     #*** add additional arguments for regression functions
     # ind0 <- frm_prepare_models_design_matrices( ind0=ind0, dat=dat, NM=NM)
-
     maxiter <- iter
     iter <- 1
     iterate <- TRUE
@@ -153,6 +153,7 @@ zz0 <- Sys.time()
 
     }
     #***************************************
+
 # cat("\n* MCMC algorithm ") ; zz1 <- Sys.time(); print(zz1-zz0) ; zz0 <- zz1
 
     if (verbose){
@@ -172,7 +173,6 @@ zz0 <- Sys.time()
     ic <- list()
     ic$N <- nrow(dat0)
     ic$np <- nrow(partable)
-
     #--- descriptive statistics
     desc_vars <- frm_fb_descriptives_variables(dat=dat, predictorMatrix=predictorMatrix,
                         freq_miss_values=freq_miss_values, dat0=dat0, parms_mcmc=parms_mcmc )

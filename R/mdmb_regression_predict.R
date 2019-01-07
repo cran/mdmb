@@ -1,17 +1,16 @@
 ## File Name: mdmb_regression_predict.R
-## File Version: 0.14
+## File Version: 0.21
 
 #**** evaluate individual likelihood
 mdmb_regression_predict <- function( Xdes, beta, offset_values, type, y,
         index_beta )
 {
     np <- length(beta)
+    beta1 <- beta[ index_beta ]
     if (type %in% c("oprobit","logistic") ){
-        beta1 <- beta[ index_beta ]
         linear.predictor <- Xdes %*% beta1 + offset_values
     }
     if (type %in% c("yjt","bct") ){
-        beta1 <- beta[ seq(1, np-2) ]
         linear.predictor <- Xdes %*% beta1 + offset_values
     }
     fitted.values <- linear.predictor
@@ -22,11 +21,11 @@ mdmb_regression_predict <- function( Xdes, beta, offset_values, type, y,
     }
     #*** include transformed values in yj transformation
     if (type=="yjt"){
-        lam0 <- beta[ np ]
+        lam0 <- beta["lambda"]
         fitted.values <- yj_antitrafo( y=linear.predictor, lambda=lam0)
     }
     if (type=="bct"){
-        lam0 <- beta[ np ]
+        lam0 <- beta["lambda"]
         fitted.values <- bc_antitrafo( y=linear.predictor, lambda=lam0)
     }
     #--- output

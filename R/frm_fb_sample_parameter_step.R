@@ -1,12 +1,12 @@
 ## File Name: frm_fb_sample_parameter_step.R
-## File Version: 0.372
+## File Version: 0.386
 
 
 frm_fb_sample_parameter_step <- function( ind_mm, dat, weights,
             mod, coef, sigma )
 {
     #--- compute likelihood
-    mod$coefficients <- coef
+    mod$coefficients <- mod$coef <- coef
     use_variable_level <- ind_mm$use_variable_level
     mod$sigma <- sigma
     #* adapt for sampling parameters for models with variables at higher levels
@@ -28,7 +28,8 @@ frm_fb_sample_parameter_step <- function( ind_mm, dat, weights,
     } else {
         dmod <- do.call( what=ind_mm$R_density_fct, args=args )
         # log-likelihood
-        ll <- sum( log( dmod$like ) * weights )
+        eps <- 1e-100
+        ll <- sum( log( dmod$like + eps) * weights )
         res <- list( like=dmod$like, ll=ll)
     }
     return(res)

@@ -1,5 +1,5 @@
 ## File Name: frm_fb_partable.R
-## File Version: 0.455
+## File Version: 0.471
 
 frm_fb_partable <- function( ind0, parms_mcmc )
 {
@@ -13,7 +13,7 @@ frm_fb_partable <- function( ind0, parms_mcmc )
     accrate <- NULL
 
     for (mm in 1:(NM+1)){
-        # mm <- 1
+        # cat("------ mm=", mm, "----\n")
         names_mm <- parms[[mm]][1]
         NC <- length(names_mm)
         # NC <- ind0[[mm]]$N_coef
@@ -22,11 +22,8 @@ frm_fb_partable <- function( ind0, parms_mcmc )
         dv_mm <- ind0[[mm]]$dv_vars
         c1 <- names_mm
         if (NC > 0){
-            dfr1 <- data.frame(
-                        "index"=parms_index[[mm]][1],
-                        "model"=mm,
-                        "dv"=dv_mm, "parm"=c1,
-                        "ON"=1, "est"=NA )
+            dfr1 <- data.frame( index=parms_index[[mm]][1], model=mm,
+                        dv=dv_mm, parm=c1, ON=1, est=NA )
             c2 <- ind0[[mm]]$coef_MH
             c2 <- c2$accepted / c2$iter
             accrate <- c( accrate, c2)
@@ -42,13 +39,8 @@ frm_fb_partable <- function( ind0, parms_mcmc )
         include_sigma <- include_sigma & ( ! is_sigma_fixed    )
         names_mm <- parms[[mm]][2]
         if ( include_sigma ){
-            dfr1b <- data.frame(
-                        "index"=parms_index[[mm]][2],
-                        "model"=mm,
-                        # "type"=model_mm,
-                        "dv"=dv_mm,
-                        "parm"=names_mm, "ON"=0,
-                        "est"=NA )
+            dfr1b <- data.frame( index=parms_index[[mm]][2],
+                        model=mm, dv=dv_mm,    parm=names_mm, ON=0, est=NA )
             colnames(dfr1b)[ rename_index ] <- rename_names
             dfr1 <- rbind( dfr1, dfr1b )
             c2 <- ind0[[mm]]$sigma_MH
@@ -57,9 +49,8 @@ frm_fb_partable <- function( ind0, parms_mcmc )
         }
         dfr <- rbind( dfr1, dfr )
     }
-
     NP <- nrow(dfr)
-    dfr <- data.frame("index"=1:NP, dfr )
+    dfr <- data.frame(index=1:NP, dfr )
     rownames(dfr) <- NULL
     dfr <- dfr[ ! is.na( dfr$idparm ), ]
 
@@ -75,24 +66,27 @@ frm_fb_partable <- function( ind0, parms_mcmc )
     dfr[, "est" ] <- est[ind1]
     dfr[, "se" ] <- apply( values, 2, stats::sd )[ind1]
 
+    # p values
     p1 <- colMeans( values > 0 )
     p2 <- colMeans( values < 0 )
     y0 <- 2 * ifelse( p1 < p2, p1, p2 )
     dfr[, "p" ] <- y0[ind1]
+
+    # confidence interval
     dfr[, "lower95"] <- apply( values, 2, stats::quantile, probs=.025 )[ind1]
     dfr[, "upper95"] <- apply( values, 2, stats::quantile, probs=.975 )[ind1]
 
     #--- convert parameter values into coda object
     NV <- ncol(values)
-    values <- values[, seq(NV,1,-1) ]
+    # values <- values[, seq(NV,1,-1) ]
     dfr11 <- dfr[ order(dfr$idparm), ]
-    dfr11 <- dfr11[ seq(NV,1,-1), ]
-    colnames(values) <- paste(dfr$parm)
+    # dfr11 <- dfr11[ seq(NV,1,-1), ]
+    colnames(values) <- paste(dfr11$parm)
 
     values_coda <- coda::mcmc(data=values, start=min(parms_mcmc$iter_save),
                                 end=max(parms_mcmc$iter_save),
                                 thin=diff(parms_mcmc$iter_save)[1] )
-#    colnames(values_coda) <- paste( dfr$parm )
+    colnames(values_coda) <- colnames(values)
 
     #--- technical summary MCMC algorithm
     dfr2 <- dfr[, 1:5]

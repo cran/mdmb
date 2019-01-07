@@ -1,5 +1,5 @@
 ## File Name: frm_fb_init_imputations.R
-## File Version: 0.45
+## File Version: 0.485
 
 frm_fb_init_imputations <- function( Nimp, model_results, burnin, iter, impute_vars,
         impute_vars_index, ind_miss, ind0, dv_vars,    variablesMatrix, dat=NULL )
@@ -28,9 +28,9 @@ frm_fb_init_imputations <- function( Nimp, model_results, burnin, iter, impute_v
         M1 <- as.data.frame(M1)
         mm <- which( var_vv==dv_vars )
         model_mm <- ind0[[mm]]$model
-
         if ( model_mm %in% c("bctreg","yjtreg","linreg") ){
             parm <- ind0[[mm]]$coef
+            # parm <- mdmb_extract_coef(mod=ind0[[mm]])
             np <- length(parm)
             if ( model_mm=="linreg" ){
                 ind_sigma <- np + 1
@@ -38,6 +38,12 @@ frm_fb_init_imputations <- function( Nimp, model_results, burnin, iter, impute_v
             }
             if ( model_mm %in% c("bctreg","yjtreg") ){
                 ind_sigma <- np - 1
+                est_df <- ind0[[mm]]$R_args$est_df
+                if ( ! is.null(est_df) ){
+                    if (est_df){
+                        ind_sigma <- np - 2
+                    }
+                }
             }
             ind0[[mm]]$sigma <- parm[ ind_sigma ]
         }
@@ -45,11 +51,10 @@ frm_fb_init_imputations <- function( Nimp, model_results, burnin, iter, impute_v
             ind0[[mm]]$sigma <- sqrt( model_results[[mm]]$sigma2 )
         }
         M1$sd_proposal <- ind0[[mm]]$sigma
-
         is_probit <- ind0[[mm]]$R_args$probit
         if (is.null(is_probit) ){
             is_probit <- FALSE
-        }        
+        }
         if( is_probit ){
             M1$sd_proposal <- .25*M1$sd_proposal
         }

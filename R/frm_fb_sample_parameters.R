@@ -1,5 +1,5 @@
 ## File Name: frm_fb_sample_parameters.R
-## File Version: 0.5313
+## File Version: 0.5379
 
 
 frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
@@ -14,6 +14,7 @@ frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
     # cat("\n---------------------- mm=", mm, " --------\n")
         #--- likelihood evaluated at old parameter
         mod <- model_results[[mm]]
+        R_args <- ind_mm$R_args
         coef0 <- mod$coef
         sigma0 <- ind_mm$sigma
         mod$sigma <- sigma0
@@ -42,8 +43,13 @@ frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
 
         if ( ( NC > 0) & ( ! use_gibbs_model ) ) {
             for (cc in 1:NC){
+                # cat("**************** cc=", cc, "*****************\n")
                 coef1 <- coef0
                 coef1[cc] <- stats::rnorm(1, mean=coef0[cc], sd=ind_mm$coef_sd_proposal[cc])
+                # squeeze parameter for estimating df
+                coef1 <- frm_fb_sample_parameters_df_squeeze(coef1=coef1, ind_mm=ind_mm,
+                                cc=cc, NC=NC)
+                # evaluate likelihood
                 res1 <- frm_fb_sample_parameter_step( ind_mm=ind_mm, dat=dat,
                                 weights=weights, mod=mod, coef=coef1, sigma=sigma0)
                 accept <- frm_fb_sample_parameters_mh_acceptance_step(ll0=res0$ll, ll1=res1$ll)
@@ -55,7 +61,6 @@ frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
                 }
             }
         }
-
         #--- sample sigma
         sample_sigma <- ind_mm$sample_sigma
         if ( sample_sigma & ( ! use_gibbs_model ) ){
@@ -70,7 +75,7 @@ frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
                 ind_mm$sigma_MH$accepted <- ind_mm$sigma_MH$accepted + 1
             }
         }
-        mod$coefficients <- coef0
+        mod$coefficients <- mod$coef <- coef0
         ind_mm$coef0 <- coef0
         mod$sigma <- sigma0
         ind_mm$sigma <- sigma0
@@ -97,9 +102,10 @@ frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
             }
         }
         vars_d <- parms_mcmc$vars_descriptives
-        parms_mcmc$M_mcmc[ii,] <- colMeans( dat[,vars_d ] )
-        parms_mcmc$SD_mcmc[ii,] <- apply( dat[,vars_d ], 2, stats::sd )
-    }
+        parms_mcmc$M_mcmc[ii,] <- colMeans( dat[, vars_d ] )
+        parms_mcmc$SD_mcmc[ii,] <- apply( dat[, vars_d ], 2, stats::sd )
+    }  # end mm
+
     #--------------------------------
     #--- output
     res <- list( model_results=model_results, ind0=ind0, parms_mcmc=parms_mcmc )
