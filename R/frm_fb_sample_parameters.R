@@ -1,5 +1,5 @@
 ## File Name: frm_fb_sample_parameters.R
-## File Version: 0.5379
+## File Version: 0.5391
 
 
 frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
@@ -14,7 +14,7 @@ frm_fb_sample_parameters <- function( dat, ind0, NM, eps=1E-30, iter=NULL,
     # cat("\n---------------------- mm=", mm, " --------\n")
         #--- likelihood evaluated at old parameter
         mod <- model_results[[mm]]
-        R_args <- ind_mm$R_args
+        R_args <- mod$R_args <- ind_mm$R_args
         coef0 <- mod$coef
         sigma0 <- ind_mm$sigma
         mod$sigma <- sigma0
