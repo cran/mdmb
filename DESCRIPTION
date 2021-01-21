@@ -1,8 +1,8 @@
 Package: mdmb
 Type: Package
 Title: Model Based Treatment of Missing Data
-Version: 1.4-12
-Date: 2020-05-11 18:13:34
+Version: 1.5-8
+Date: 2021-01-21 13:00:54
 Author: 
     Alexander Robitzsch [aut, cre], Oliver Luedtke [aut]
 Maintainer: Alexander Robitzsch <robitzsch@leibniz-ipn.de>
@@ -11,8 +11,8 @@ Description:
     models with missing values in covariates or the dependent 
     variable using maximum likelihood or Bayesian estimation 
     (Ibrahim et al., 2005; <doi:10.1198/016214504000001844>;
-    Luedtke, Robitzsch, & West, 2019a, 2019b, <doi:10.1037/met0000233>; 
-    <doi:10.1080/00273171.2019.1640104>).
+    Luedtke, Robitzsch, & West, 2020a, 2020b;
+    <doi:10.1080/00273171.2019.1640104><doi:10.1037/met0000233>).
     The regression model can be nonlinear (e.g., interaction 
     effects, quadratic effects or B-spline functions). 
     Multilevel models with missing data in predictors are
@@ -28,6 +28,6 @@ URL: https://github.com/alexanderrobitzsch/mdmb,
         https://sites.google.com/site/alexanderrobitzsch2/software
 License: GPL (>= 2)
 NeedsCompilation: yes
-Packaged: 2020-05-11 16:15:56 UTC; sunpn563
+Packaged: 2021-01-21 12:04:16 UTC; sunpn563
 Repository: CRAN
-Date/Publication: 2020-05-12 17:11:06 UTC
+Date/Publication: 2021-01-21 15:10:06 UTC
