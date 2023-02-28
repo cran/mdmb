@@ -1,6 +1,6 @@
-2f592846ee041c05687466b6df015eab *DESCRIPTION
+95a4254aff63ed50c8c30dda48f2acf6 *DESCRIPTION
 93b71634f1811395822d27a384fc7519 *NAMESPACE
-897f131f486ea08f8050d7aa009b73e8 *R/RcppExports.R
+90ca5c7aa3dc2adad87212340925c88a *R/RcppExports.R
 c2b109f031a0e4a46865a72c27c59825 *R/bc_antitrafo.R
 69c62902ad0184755f840b782a51f850 *R/bc_trafo.R
 63b134540c6c0996638badde699e61c1 *R/bc_trafo_derivative.R
@@ -31,11 +31,11 @@ da40503a23386efc9317c3ff68577493 *R/fit_yjt_scaled.R
 1d144d0848a3db9b19bce726e87fea62 *R/frm_define_model_R_function.R
 12b23ef241e6c8eb0c28ff4f30880cad *R/frm_define_model_R_function_include_maxiter.R
 414275aedb5abea13e5a2b9d490473fb *R/frm_descriptives_variables.R
-8b12cb0449dad45c4ce42d740e8756c1 *R/frm_em.R
+8fb3ff05e79becc36b02e16754330060 *R/frm_em.R
 63c7bf190366247406ac993a8c30a754 *R/frm_em_avcov.R
-a572d5d1b6b4c41f408032a36230488a *R/frm_em_calc_likelihood.R
+46f77d74729176239c4b623184847d27 *R/frm_em_calc_likelihood.R
 5b259f05bceab40dfaa40b15b03cafcf *R/frm_em_calc_likelihood_estimate_model.R
-fb838fc7b02f9d813f841bedb5368b04 *R/frm_em_calc_total_likelihood.R
+8394af1b52a3726b47a0393d2bbed753 *R/frm_em_calc_total_likelihood.R
 f565b4dbf0653d742e5a5c4cd8c90eab *R/frm_em_calc_update_observed_likelihood.R
 e975e5cd09239048b7bc7b9a31b5cf13 *R/frm_em_ic.R
 16f64d16deabcfb08748eaf9d521d820 *R/frm_em_include_coef_inits.R
@@ -79,9 +79,9 @@ bec0b09f571b9022b070c02404d66f92 *R/frm_mdmb_regression_density.R
 632eb79114f78eeba673cfadee852ecb *R/frm_normalize_vector.R
 f34a7e2cf4fd0a4509045b3f56625a07 *R/frm_oprobit_density.R
 a5ccdab8580169890f1849980d1faaed *R/frm_partable_thresholds.R
-edc00d1a8a2e20e5d4127bb6862bfa2d *R/frm_prepare_data_em.R
+64b4f839510a6f9b032e3b9644285268 *R/frm_prepare_data_em.R
 24cb1dc54f239cae85608e76523086a5 *R/frm_prepare_data_fb.R
-8913d4fe4b77be9e7ffe995798ea1e0d *R/frm_prepare_data_include_latent_data.R
+5acf1396d0c1ce684fddb170daf50e4d *R/frm_prepare_data_include_latent_data.R
 680ed372fbe946e7e5c5db781a62a277 *R/frm_prepare_model_nodes_weights.R
 b0007beb9b32c3f0fe8cf07f856b6cad *R/frm_prepare_models.R
 1ba8a37604b1473517c918bb0423a995 *R/frm_prepare_models_descriptives.R
@@ -160,8 +160,8 @@ c28fe95679a574df2793b5febacabd47 *R/vcov.mdmb.R
 a84f5e89f6fbd3c350bd1e4fcc477bbc *R/yj_trafo.R
 46035ed2655a9d3b1b0a8675ff928094 *R/yjt_regression.R
 2f9e0a796aa622a3b8ee37b55c2caee4 *R/zzz.R
-b377f83f5a344d9e52bbca5b4206d2c0 *README.md
-bd2bda47611e61a010cecd74286d88a0 *build/partial.rdb
+cd03da7df409efcac8437d54039ab865 *README.md
+c863dab3f9637206e5d660f8117ce4fe *build/partial.rdb
 a20ab8af666dc32732cb912476f50938 *data/data.mb01.rda
 da942935a8dc1b471179fc3380ab2ecf *data/data.mb02.rda
 3781af5eab3e432f608123a90f4885c1 *data/data.mb03.rda
@@ -169,7 +169,7 @@ da942935a8dc1b471179fc3380ab2ecf *data/data.mb02.rda
 637a102ac4e28486f98454b0cec93c30 *data/data.mb05.rda
 0034271919e5db767538effcb2ac82ce *data/datalist
 6b9d78d9b584a95c819cd4bba04d2dc4 *inst/CITATION
-557683b807680821c1ef6afb18103bbb *inst/NEWS
+613b0c025576d3044ca28e8092b5c61c *inst/NEWS
 1d80284da4c46e09b4581bef7e74384c *man/data.mb.Rd
 55eeb93ae25a69f2054853e8c09ebd45 *man/eval_prior_list.Rd
 3668f37667f8cf6a56e987f64f00ce46 *man/frm.Rd
@@ -181,7 +181,7 @@ b62d366e6fbffec8ad1779c9b9e55263 *man/remove_NA_data_frame.Rd
 8275315ebfe76b46109c5ec94c7812ce *man/yjt_dist.Rd
 3900e4e4b505787e0f3cb83ad8ba2138 *src/Makevars
 36dc26a5d3e080089104b503a783361f *src/Makevars.win
-dd1fd526d976a90d74409b3f305729bb *src/RcppExports.cpp
+f72dfbd25ac661e490189b5887bbb02d *src/RcppExports.cpp
 0c567602241d607f73f7e058c810e509 *src/mdmb_rcpp_dnorm_dt.cpp
 a8aa3147fef98313624890c3462bd6c0 *src/mdmb_rcpp_dnorm_dt.h
 ff8695457d5e38eff70363e37df7578f *src/mdmb_rcpp_linreg.cpp
